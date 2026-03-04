@@ -1,5 +1,8 @@
 package com.welton.agregadorinvestimentos.controller;
 
+import com.welton.agregadorinvestimentos.controller.dto.CreateAccountDto;
+import com.welton.agregadorinvestimentos.controller.dto.CreateUserDto;
+import com.welton.agregadorinvestimentos.controller.dto.UpdateUserDto;
 import com.welton.agregadorinvestimentos.entity.User;
 import com.welton.agregadorinvestimentos.service.UserService;
 import org.springframework.http.ResponseEntity;
@@ -51,5 +54,11 @@ public class UserController {
     public ResponseEntity<Void> deleteById(@PathVariable("userId") String userId) {
         service.deleteById(userId);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/{userId}/accounts")
+    public ResponseEntity<Void> deleteById(@PathVariable("userId") String userId, @RequestBody CreateAccountDto accountDto) {
+        service.createAccount(userId, accountDto);
+        return ResponseEntity.ok().build();
     }
 }

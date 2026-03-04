@@ -1,7 +1,7 @@
 package com.welton.agregadorinvestimentos.service;
 
-import com.welton.agregadorinvestimentos.controller.CreateUserDto;
-import com.welton.agregadorinvestimentos.controller.UpdateUserDto;
+import com.welton.agregadorinvestimentos.controller.dto.CreateUserDto;
+import com.welton.agregadorinvestimentos.controller.dto.UpdateUserDto;
 import com.welton.agregadorinvestimentos.entity.User;
 import com.welton.agregadorinvestimentos.repository.UserRepository;
 import org.junit.jupiter.api.DisplayName;

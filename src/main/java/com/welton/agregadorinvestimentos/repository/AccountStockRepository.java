@@ -1,0 +1,12 @@
+package com.welton.agregadorinvestimentos.repository;
+
+import com.welton.agregadorinvestimentos.entity.AccountStock;
+import com.welton.agregadorinvestimentos.entity.AccountStockId;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.UUID;
+
+@Repository
+public interface AccountStockRepository extends JpaRepository<AccountStock, AccountStockId> {
+}

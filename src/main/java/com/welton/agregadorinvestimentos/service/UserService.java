@@ -1,11 +1,19 @@
 package com.welton.agregadorinvestimentos.service;
 
-import com.welton.agregadorinvestimentos.controller.CreateUserDto;
-import com.welton.agregadorinvestimentos.controller.UpdateUserDto;
+import com.welton.agregadorinvestimentos.controller.dto.CreateAccountDto;
+import com.welton.agregadorinvestimentos.controller.dto.CreateUserDto;
+import com.welton.agregadorinvestimentos.controller.dto.UpdateUserDto;
+import com.welton.agregadorinvestimentos.entity.Account;
+import com.welton.agregadorinvestimentos.entity.BillingAddress;
 import com.welton.agregadorinvestimentos.entity.User;
+import com.welton.agregadorinvestimentos.repository.AccountRepository;
+import com.welton.agregadorinvestimentos.repository.BillingAddressRepository;
 import com.welton.agregadorinvestimentos.repository.UserRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -15,9 +23,13 @@ public class UserService {
 
     // Imprementação de class
     private final UserRepository repository;
+    private final AccountRepository accountRepository;
+    private final BillingAddressRepository billingAddressRepository;
 
-    public UserService(UserRepository repository) {
+    public UserService(UserRepository repository, AccountRepository accountRepository, BillingAddressRepository billingAddressRepository) {
         this.repository = repository;
+        this.accountRepository = accountRepository;
+        this.billingAddressRepository = billingAddressRepository;
     }
 
     public UUID createUser(CreateUserDto createUserDto) {
@@ -67,5 +79,28 @@ public class UserService {
         if (userExists) {
             repository.deleteById(id);
         }
+    }
+
+    public void createAccount(String userId, CreateAccountDto accountDto) {
+        var user = repository.findById(UUID.fromString(userId)).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        var account = new Account(
+                null,
+                user,
+                null,
+                accountDto.description(),
+                new ArrayList<>()
+        );
+
+        var accountCreated = accountRepository.save(account);
+
+        var billingAddress = new BillingAddress(
+                accountCreated.getAccountId(),
+                account,
+                accountDto.street(),
+                accountDto.number()
+        );
+
+        billingAddressRepository.save(billingAddress);
     }
 }
